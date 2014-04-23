@@ -1,54 +1,33 @@
 // Load plugins
 
-var gulp = require('gulp'),
-    autoprefixer = require('gulp-autoprefixer'),
-    minifycss = require('gulp-minify-css'),
-    uglify = require('gulp-uglify'),
-    imagemin = require('gulp-imagemin'),
-    watch = require('gulp-watch'),
-    notify = require('gulp-notify');
-clean = require('gulp-clean');
-server = lr();
+var gulp = require('gulp');
+    resize = require('gulp-image-resize');
+    compress = require('gulp-imagemin');
+	clean = require('gulp-clean');
+	server = lr();
 
 // Run everything at once
 
-gulp.task('default', ['clean'], function() {
-    gulp.start('styles', 'scripts', 'images');
+gulp.task('default', function() {
+    gulp.start('resize', 'compress');
 });
 
-// auto-prefix and minify CSS
+// Resize
 
-gulp.task('styles', function() {
-        return gulp.src('./css/*.css')
-            .pipe(prefix('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-            .pipe(minifyCSS())
-            .pipe(rename({
-                suffix: '.min'
-            }))
-            .pipe(gulp.dest('dist/css'))
-            .pipe(notify({
-                message: 'CSS polishing complete'
-            }));
-    };
+gulp.task('resize', function () {
+  gulp.src('img/*')
+    .pipe(imageResize({ 
+      width : 100,
+      height : 100,
+      crop : true,
+      upscale : false
+    }))
+    .pipe(gulp.dest('dist'));
+});
 
-    // Minify JavaScript
+ // Minify images
 
-    gulp.task('scripts', function() {
-        return gulp.src('./js/*.js')
-            .pipe(uglify())
-            .pipe(rename({
-                suffix: '.min'
-            }))
-            .pipe(gulp.dest('dist/js'))
-            .pipe(notify({
-                message: 'JavaScript minified'
-            }));
-    });
-
-    // Minify images
-
-
-    gulp.task('images', function() {
+    gulp.task('compress', function() {
         return gulp.src('./img/*')
             .pipe(cache(imagemin({
                 optimizationLevel: 3,
@@ -63,9 +42,9 @@ gulp.task('styles', function() {
 
     // Clean destination folders
 
-    gulp.task('clean', function() {
-        return gulp.src(['dist/assets/css', 'dist/assets/js', 'dist/assets/img'], {
-            read: false
-        })
-            .pipe(clean());
-    });
+ //   gulp.task('clean', function() {
+ //       return gulp.src(['dist/assets/css', 'dist/assets/js', 'dist/assets/img'], {
+ //           read: false
+ //		})
+ //           .pipe(clean());
+ //   });

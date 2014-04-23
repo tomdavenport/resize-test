@@ -20,7 +20,7 @@ ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 
 Now paste this to install *Image Magick*:
 
-`brew install -g imagemagick`
+```brew install -g imagemagick```
 
 Gulp will use Image Magick to quickly convert all your images.
 
